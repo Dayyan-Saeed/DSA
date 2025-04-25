@@ -1,0 +1,193 @@
+#include <iostream>
+using namespace std;
+
+
+struct Node
+{
+	int data;
+	Node* next;
+};
+
+
+class LinkedList
+{
+protected:
+	Node* head;
+public:
+	LinkedList();
+	virtual void insertAtTail(int) = 0;
+	virtual void display() = 0;
+	virtual void insertAtHead(int) = 0;
+	virtual int deleteFromTail() = 0;
+	virtual int deleteFromHead() = 0;
+	virtual bool isEmpty() = 0;
+};
+
+LinkedList::LinkedList()
+{
+	head = nullptr;
+}
+
+class myLinkedList :public LinkedList
+{
+public:
+	void insertAtTail(int);	//I made them private just for insertSorted
+	void insertAtHead(int); //I made them private just for insertSorted
+	void display();
+	int deleteFromTail();
+	int deleteFromHead();
+	bool isEmpty();
+};
+
+
+
+bool myLinkedList::isEmpty()
+{
+	if (head == nullptr)
+		return true;
+
+	return false;
+}
+
+int myLinkedList::deleteFromHead()
+{
+	if (head == nullptr)
+	{
+		cout << "LL is empty" << endl;
+		return NULL;
+	}
+
+	else if (head->next == nullptr) //single node case
+	{
+		int RV = head->data;
+		delete head;
+		head = nullptr;
+		return RV;
+	}
+
+	else
+	{
+		int RV = head->data;
+		Node* temp = head;
+		head = head->next;
+		delete temp;
+		temp = nullptr;
+		return RV;
+	}
+}
+
+
+void myLinkedList::insertAtHead(int value)
+{
+	Node* newNode;	//this is a WILD pointer
+	newNode = new Node;
+	newNode->data = value;
+	newNode->next = nullptr;
+
+	if (head == nullptr) //first NODE to insert
+	{
+		head = newNode;		// pointer = memory
+	}
+
+	else //rest of the NODES
+	{
+		newNode->next = head;
+		head = newNode;
+	}
+}
+
+void myLinkedList::display()
+{
+	Node* temp = head;
+
+	while (1)
+	{
+		if (temp == nullptr)
+			break;
+
+		cout << temp->data << endl;
+		temp = temp->next;
+	}
+
+
+}
+
+
+void myLinkedList::insertAtTail(int value)
+{
+	Node* newNode;	//this is a WILD pointer
+	newNode = new Node;
+	newNode->data = value;
+	newNode->next = nullptr;
+
+	if (head == nullptr) //first NODE to insert
+	{
+		head = newNode;		// pointer = memory
+	}
+
+	else //rest of the NODES
+	{
+		Node* t = head;
+		while (1)
+		{
+			if (t->next == nullptr)
+				break;
+
+			t = t->next;
+		}
+
+		t->next = newNode;
+	}
+}
+
+int myLinkedList::deleteFromTail()
+{
+	if (head == nullptr)
+	{
+		cout << "LL is empty" << endl;
+		return NULL;
+	}
+
+	else if (head->next == nullptr) //single node case
+	{
+		int RV = head->data;
+		delete head;
+		head = nullptr;
+		return RV;
+	}
+
+	else
+	{
+		Node* temp = head;
+
+		while (1)
+		{
+			if (temp->next->next == nullptr)
+				break;
+
+			temp = temp->next;
+		}
+
+		int returningValue = temp->next->data;
+		delete temp->next;
+		temp->next = nullptr;
+		return returningValue;
+	}
+}
+int main()
+{
+	myLinkedList obj;
+
+	obj.insertAtHead(80);
+	obj.insertAtHead(0);
+	obj.insertAtHead(-3);
+	obj.insertAtTail(999);
+	obj.insertAtTail(-25);
+
+	cout << "Elements in the LL are:   ";
+	obj.display();
+	cout << "Delete From Tail: " << obj.deleteFromTail() << endl;
+	cout << "Delete From Head: " << obj.deleteFromHead() << endl;
+	obj.display();
+	return 0;
+}

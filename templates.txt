@@ -1,0 +1,112 @@
+
+
+stack.h
+
+#pragma once
+#include <iostream>
+using namespace std;
+
+template <class T>
+class Stack
+{
+protected:
+	T* arr;
+	int maxSize;
+	int currentSize;
+public:
+	virtual void push(T) = 0; // push Value
+	virtual bool isFull() = 0;
+	T Sum();
+	Stack(int);
+};
+
+template <class T>
+Stack<T>::Stack(int s)
+{
+	arr = new T[s];
+	currentSize = 0;
+	maxSize = s;
+}
+
+
+
+
+
+Mystack.h
+
+
+#pragma once
+#include "Stack.h"
+
+template <class T>
+class MyStack :public Stack<T>
+{
+public:
+	void push(T);		//addValue
+	T Sum();
+	MyStack(int s);
+	bool isFull();
+};
+
+template <class T>
+bool MyStack<T>::isFull()
+{
+	return Stack<T>::currentSize == Stack<T>::maxSize;
+}
+
+template <class T>
+MyStack<T>::MyStack(int s) :Stack<T>(s)
+{
+
+}
+
+template <class T>
+void MyStack<T>::push(T v)
+{
+	if (isFull())
+		cout << "Stack is Full" << endl;
+
+	else
+	{
+		Stack<T>::arr[Stack<T>::currentSize] = v;
+		Stack<T>::currentSize++;
+	}
+}
+
+
+template <class T>
+T MyStack<T>::Sum()
+{
+	int sum = 0;
+	for (int i = 0; i < Stack<T>::currentSize; i++)
+	{
+		sum += Stack<T>::arr[i];
+	}
+	return sum;
+}
+
+
+
+
+
+
+
+main
+
+#include "MyStack.h"
+
+int main()
+{
+	MyStack<int> s(6);
+
+	s.push(1);
+	s.push(2);
+	s.push(3);
+	s.push(0);
+	s.push(4);
+	s.push(-4);
+	
+	int sum = s.Sum();
+	cout << "Sum of all Elements of Stack is  =  " << sum << endl;
+	return 0;
+}
